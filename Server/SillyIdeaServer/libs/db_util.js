@@ -24,28 +24,33 @@ DBConn.connect(){
   }));
 }
 
-DBConn.get_idea_by_id(id){
-  
-  return {};
+DBConn.get_idea_by_id(id, callback){
+  var resultDict = {}
+  callback(resultDict);
 }
 
-DBConn.del_idea_by_id(id){
-  return false;
+DBConn.del_idea_by_id(id, callback){
+  var bResult = false;
+  callback(bResult);
 }
 
-DBConn.get_ideas(page, unit){
-  return [{}];
+DBConn.get_ideas(page, unit, callback){
+  var resultDict = {};
+  callback(resultDict);
 }
 
-DBConn.update_idea_by_id(id, content){
-  return false;
+DBConn.update_idea_by_id(id, content, callback){
+  var bResult = false;
+  callback(bResult);
 }
 
 DBConn.add_idea(uid, content){
-  return 0;
+  var iIdeaId = 0;
+  callback(iIdeaId);
 }
 
-DBConn.create_idea_id(){
-  return 0;
+DBConn.create_idea_id(uid, callback){
+  var iIdeaId = 0;
+  callback(iIdeaId);
 }
 

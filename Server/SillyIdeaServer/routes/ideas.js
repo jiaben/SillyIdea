@@ -17,7 +17,10 @@ router.get('/list', function(req, res, next){
     return;
   }
   var page = req.body['page'];
-  res.send('put a resource');
+  var db = new DBConn();
+  db.get_ideas(params, page_unit, resultDict => {
+    resp_json_content(dict_to_json(resultDict));
+  }
 });
 
 router.get('/:ideaid', function(req, res, next){
@@ -34,9 +37,10 @@ router.get('/:ideaid', function(req, res, next){
   }
 
   var db = new DBConn();
-  db.conn();
-  var idea = db.get_idea_by_id(iid);
-  resp_json_content(dict_to_json(idea));
+  db.get_idea_by_id(iid, (jsonObj)=> {
+    resp_json_content(dict_to_json(jsonObj));
+    }
+  );
 }
 
 router.post('/', function(req, res, next){
@@ -50,9 +54,11 @@ router.post('/', function(req, res, next){
   var flags = req.body['flags'];
   var content = req.body['content'];
   var db = new DBConn();
-  db.conn();
-  var new_idea_id = db.add_idea(uid, content);
-  resp_json_content(dict_to_json({id: new_idea_id});
+  db.add_idea(uid, iid => {
+    var res_dict = {};
+    res_dict['id'] = iid;
+    resp_json_content(dict_to_json(res_dict))
+  }
 });
 
 router.put('/', function(req, res, next){
@@ -67,12 +73,14 @@ router.put('/', function(req, res, next){
   var content = req.body['content'];
   var idea_id = req.body['idea_id'];
   var db = new DBConn();
-  db.conn();
-  if (db.update_idea_by_id(idea_id, content)){
-    resp_fail_page(res);
-    return;
-  }
-  resp_succ_page(res);
+  db.update_idea_by_id(idea_id, content, bResult=>{
+    if(bResult){
+      resp_succ_page(res);
+    }
+    else{
+      resp_fail_page(res);
+    }
+  });
   
 });
 
@@ -84,12 +92,14 @@ router.delete('/:ideaid', function(req, res, next) {
     return;
   }
   var db = new DBConn();
-  db.conn();
-  if (!db.del_idea_by_id(id)){
-    resp_fail_page(res);
-    return;
-  }
-  resp_succ_page(res);
+  db.del_idea_by_id(id, bResult=>{
+    if(bResult){
+      resp_succ_page(res);
+    }
+    else{
+      resp_fail_page(res);
+    }
+  });
 });
 
 
