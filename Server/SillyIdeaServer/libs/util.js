@@ -1,20 +1,37 @@
 module.export = {
   check_uid: function (req){
-    return false;
+    var uid = req.param['uid'];
+    if (isNaN(uid))
+      return false;
+
+    if (uid == 0)
+      return false;
+
+    return true;
   },
   get_idea_id: function (req){
-    return req.body['idea_id'];
+    var iid = req.body['idea_id'];
+    return iid;
   },
+
   get_user_id: function (req){
-    return req.body['user_id'];
+    var uid = req.param['user_id'];
+    return uid;
   },
+
   get_user_sess:function (req){
-    return req.body['sess'];
+    var sess = req.body['sess'];
+    return sess;
   },
+
   resp_404_page: function(res, mesg){
+    res.status(404).send(mesg);
     return;
   },
+
   resp_json_content: function(res, mesg){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(mesg);
     return;
   },
 
@@ -22,9 +39,13 @@ module.export = {
     return {};
   },
   resp_succ_page: function(res){
+    res.setHeader('Context-Type', 'text/plain');
+    res.send('succ');
     return;
   },
   resp_fail_page: function(res){
+    res.setHeader('Context-Type', 'text/plain');
+    res.send('fail');
     return;
   }
  
